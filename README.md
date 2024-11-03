@@ -4,6 +4,6 @@ Reverse engineering common smart ring protocols and data formats.
 
 ## List
 
-- Oura
-  - Oura Ring
-    - [BLE protocol](./oura/BLE.md)
+- Oura Ring
+  - [BLE protocol](./oura/BLE.md)
+  - [Application data storage](./oura/storage.md)

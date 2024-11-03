@@ -421,6 +421,8 @@ Example: `2F11 2D11 1122 2233 3344 4455 5566 6677 7788 88`
 
 Auth nonce is encrypted using AES-CBC (using the key provided in [Set Auth Key](#0x24---set-auth-key) beforehand), with PKCS5 padding.
 
+Auth key can also be retrieved from application data, see: [Storage](./storage.md).
+
 In node.js this can be emulated using AES-ECB with empty IV:
 
 ```js
