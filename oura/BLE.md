@@ -151,9 +151,32 @@ Example: `0D06 6400 00FF FFFF`
 | ------ | ------- | ------ | ------------------------------------------------------------------------- | ----- |
 | Status | `00`    | 1      | uint8 ([Start firmware update response](#start-firmware-update-response)) |       |
 
-### 0x10 - Data retrieval?
+### 0x10 - Get Events
 
-TODO: Investigate
+| Field                    | Example     | Length | Type   | Notes                       |
+| ------------------------ | ----------- | ------ | ------ | --------------------------- |
+| Start timestamp          | `B0E8 A900` | 4      | uint32 |                             |
+| Maximum number of events | `FF`        | 1      | uint8  |                             |
+| Unknown                  | `FFFF FFFF` | 4      | int32  | Always seems to equal `-1`. |
+
+Example: `1009 B0E8 A900 FFFF FFFF FF`
+
+If response tag is greater than or equal to `0x41`, the packet is treated as a response.
+
+See: [Events](#events)
+
+### 0x11 - Get Events (Response)
+
+| Field                              | Example     | Length | Type   | Notes |
+| ---------------------------------- | ----------- | ------ | ------ | ----- |
+| Events received                    | `00`        | 1      | uint8  |       |
+| Sleep analysis progress (optional) | `00`        | 1      | uint8  |       |
+| Bytes left (optional)              | `0000 0000` | 4      | uint32 |       |
+| Unknown (optional)                 | `0300`      | 2      | uint16 |       |
+
+Denotes the end of event data.
+
+Example: `1108 0000 0000 0000 0300`
 
 ### 0x12 - Sync Time
 
@@ -493,6 +516,19 @@ No payload.
 | ------ | ------- | ------ | ----- | ----- |
 | Status | `00`    | 1      | uint8 |       |
 
+## Events
+
+Similar format to base packet, can be packed as multiple inside of one Handle Value Notification.
+
+| Field     | Example                         | Length | Type                            | Notes                                    |
+| --------- | ------------------------------- | ------ | ------------------------------- | ---------------------------------------- |
+| Event tag | `61`                            | 1      | uint8 ([Event tag](#event-tag)) | Must be greater than or equal to `0x41`. |
+| Length    | `10`                            | 1      | uint8                           |                                          |
+| Timestamp | `B0E8 A900`                     | 4      | uint32                          |                                          |
+| Payload   | `1A18 0025 0000 0000 0000 00F7` | varies | bytes                           |                                          |
+
+Example: 6110 B0E8 A900 1A18 0025 0000 0000 0000 00F7
+
 # Unknown
 
 ## Read by Type request?
@@ -539,6 +575,77 @@ uint8
 | Success                    | `0x00` |
 | Battery level too low      | `0x01` |
 | Sleep analysis in progress | `0x02` |
+
+### Events
+
+#### Event tag
+
+uint8
+
+| Event tag                          | Value  |
+| ---------------------------------- | ------ |
+| Ring start                         | `0x41` |
+| Time sync                          | `0x42` |
+| Debug event                        | `0x43` |
+| IBI event                          | `0x44` |
+| State change                       | `0x45` |
+| Temp event                         | `0x46` |
+| Motion event                       | `0x47` |
+| Sleep period information           | `0x48` |
+| Sleep summary (1)                  | `0x49` |
+| PPG amplitude                      | `0x4A` |
+| Sleep phase information            | `0x4B` |
+| Sleep summary (2)                  | `0x4C` |
+| Ring sleep feature information     | `0x4D` |
+| Sleep phase details                | `0x4E` |
+| Sleep summary (3)                  | `0x4F` |
+| Activity information               | `0x50` |
+| Activity summary (1)               | `0x51` |
+| Activity summary (2)               | `0x52` |
+| Wear event                         | `0x53` |
+| Recovery summary                   | `0x54` |
+| Sleep heart rate                   | `0x55` |
+| Alert event                        | `0x56` |
+| Ring sleep feature information (2) | `0x57` |
+| Sleep summary (4)                  | `0x58` |
+| EDA event                          | `0x59` |
+| Sleep phase data                   | `0x5A` |
+| BLE connection                     | `0x5B` |
+| User information                   | `0x5C` |
+| HRV event                          | `0x5D` |
+| Self-test event                    | `0x5E` |
+| Raw ACM event                      | `0x5F` |
+| IBI and amplitude event            | `0x60` |
+| Debug data                         | `0x61` |
+| On-demand MEAs                     | `0x62` |
+| PPG peak event                     | `0x63` |
+| Raw PPG event                      | `0x64` |
+| On-demand session                  | `0x65` |
+| On-demand motion                   | `0x66` |
+| Raw PPG summary                    | `0x67` |
+| Raw PPG Data                       | `0x68` |
+| Temp period                        | `0x69` |
+| Sleep period information (2)       | `0x6A` |
+| Motion period                      | `0x6B` |
+| Feature session                    | `0x6C` |
+| MEAs quality event                 | `0x6D` |
+| SPO2 IBI and amplitude event       | `0x6E` |
+| SPO2 event                         | `0x6F` |
+| SPO2 smoothed event                | `0x70` |
+| Green IBI and amplitude event      | `0x71` |
+| Sleep ACM period                   | `0x72` |
+| EHR trace event                    | `0x73` |
+| EHR ACM intensity event            | `0x74` |
+| Sleep temp event                   | `0x75` |
+| Bedtime period                     | `0x76` |
+| SPO2 DC event                      | `0x77` |
+| Self-test data event               | `0x79` |
+| Tag event                          | `0x7A` |
+| Real step event feature (1)        | `0x7E` |
+| Real step event feature (2)        | `0x7F` |
+| CVA raw PPG data                   | `0x81` |
+| Scan start                         | `0x82` |
+| Scan end                           | `0x83` |
 
 ### Authentication
 
