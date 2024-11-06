@@ -189,7 +189,10 @@ Example: `1209 BC61 1000 0000 0000 04`
 
 ### 0x13 - Sync Time (Response)
 
-TODO: Investigate
+| Field                    | Example     | Length | Type   | Notes   |
+| ------------------------ | ----------- | ------ | ------ | ------- |
+| Current device timestamp | `4BED A900` | 4      | uint32 | seconds |
+| Unknown (Status?)        | `00`        | 1      | uint8  |         |
 
 Example: `1305 4BED A900 00`
 
@@ -520,12 +523,12 @@ No payload.
 
 Similar format to base packet, can be packed as multiple inside of one Handle Value Notification.
 
-| Field     | Example                         | Length | Type                            | Notes                                    |
-| --------- | ------------------------------- | ------ | ------------------------------- | ---------------------------------------- |
-| Event tag | `61`                            | 1      | uint8 ([Event tag](#event-tag)) | Must be greater than or equal to `0x41`. |
-| Length    | `10`                            | 1      | uint8                           |                                          |
-| Timestamp | `B0E8 A900`                     | 4      | uint32                          |                                          |
-| Payload   | `1A18 0025 0000 0000 0000 00F7` | varies | bytes                           |                                          |
+| Field     | Example                         | Length | Type                            | Notes                                                                                                                  |
+| --------- | ------------------------------- | ------ | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Event tag | `61`                            | 1      | uint8 ([Event tag](#event-tag)) | Must be greater than or equal to `0x41`.                                                                               |
+| Length    | `10`                            | 1      | uint8                           |                                                                                                                        |
+| Timestamp | `B0E8 A900`                     | 4      | uint32                          | Measured in seconds since device boot. (Reference value can be obtained from [Sync Time](#0x13---sync-time-response)). |
+| Payload   | `1A18 0025 0000 0000 0000 00F7` | varies | bytes                           |                                                                                                                        |
 
 Example: 6110 B0E8 A900 1A18 0025 0000 0000 0000 00F7
 
